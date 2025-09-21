@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Looproom Lounge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" href="/favicon.ico" />
+  </head>
+  <body>
+    <div class="app" id="app">
+      <aside class="sidebar">
+        <header class="sidebar__header">
+          <div class="brand">
+            <span class="brand__dot"></span>
+            Looproom
+          </div>
+        </header>
+        <div class="sidebar__search">
+          <input type="search" id="roomSearch" placeholder="ルームやアーティストで検索" />
+        </div>
+        <section class="sidebar__section">
+          <div class="section-title">アーティスト</div>
+          <nav class="list" id="artistList" aria-label="Artist list"></nav>
+        </section>
+        <section class="sidebar__section">
+          <div class="section-title">ルーム</div>
+          <nav class="list" id="roomList" aria-label="Room list"></nav>
+        </section>
+      </aside>
+
+      <main class="main">
+        <section class="chat" aria-live="polite">
+          <header class="chat__header">
+            <div>
+              <h1 class="chat__title" id="roomTitle">ルームを選択</h1>
+              <p class="chat__subtitle" id="roomSubtitle">左のリストからルームを選んでください。</p>
+            </div>
+            <div class="chat__actions">
+              <button class="pill-btn" id="joinLeaveBtn" type="button" disabled>参加</button>
+              <button class="icon-btn" id="refreshMessagesBtn" type="button" aria-label="最新メッセージを取得">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v3l4-4-4-4v3a8 8 0 108 8h-2a6 6 0 11-6-6z" /></svg>
+              </button>
+            </div>
+          </header>
+          <div class="chat__player" id="spotifyPlayer" hidden></div>
+          <div class="chat__timeline" id="chatTimeline"></div>
+          <form class="chat__composer" id="chatForm">
+            <textarea id="chatInput" rows="2" placeholder="気軽にコメントを残そう" disabled></textarea>
+            <div class="chat__composer-footer">
+              <label class="toggle">
+                <input type="checkbox" id="focusModeToggle" />
+                <span>フォーカスモード</span>
+              </label>
+              <button class="pill-btn" type="submit" id="sendMessageBtn" disabled>送信</button>
+            </div>
+          </form>
+        </section>
+
+        <section class="sidepanel">
+          <div class="card now-playing" id="nowPlayingCard">
+            <header class="card__header">
+              <span class="card__label">Now Playing</span>
+              <button class="icon-btn" id="updatePlaybackBtn" type="button" aria-label="再生情報を更新">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v3l4-4-4-4v3a8 8 0 108 8h-2a6 6 0 11-6-6z" /></svg>
+              </button>
+            </header>
+            <div class="now-playing__body">
+              <div class="now-playing__art" id="trackArtwork">🎧</div>
+              <div class="now-playing__meta">
+                <div class="now-playing__title" id="trackTitle">再生待ち</div>
+                <div class="now-playing__artist" id="trackArtist">-</div>
+                <div class="now-playing__progress">
+                  <span id="trackProgress">00:00</span>
+                  <span id="trackDuration">00:00</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card queue">
+            <header class="card__header">
+              <span class="card__label">キュー</span>
+              <button class="icon-btn" id="refreshQueueBtn" type="button" aria-label="キューを更新">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2a1 1 0 00-2 0v6H5a1 1 0 000 2h6v6a 1 1 0 002 0v-6h6a1 1 0 000-2h-6z" /></svg>
+              </button>
+            </header>
+            <ul class="queue__list" id="queueList"></ul>
+            <button class="pill-btn pill-btn--ghost" id="openQueueDialog" type="button" disabled>曲をリクエスト</button>
+          </div>
+
+          <div class="card recommendations">
+            <header class="card__header">
+              <span class="card__label">おすすめ</span>
+              <button class="icon-btn" id="refreshRecommendationsBtn" type="button" aria-label="おすすめを更新">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v3l4-4-4-4v3a8 8 0 108 8h-2a6 6 0 11-6-6z" /></svg>
+              </button>
+            </header>
+            <ul class="recommendations__list" id="recommendationList"></ul>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <dialog id="requestDialog" class="dialog">
+      <form method="dialog" class="dialog__card" id="requestForm">
+        <header>
+          <h2>曲をルームに追加</h2>
+          <p>URI かトラック ID を入力してください。</p>
+        </header>
+        <label class="field">
+          <span>Track URI</span>
+          <input type="text" id="requestTrackUri" placeholder="spotify:track:..." required />
+        </label>
+        <label class="field">
+          <span>メモ (任意)</span>
+          <textarea id="requestNote" rows="2" placeholder="どんな雰囲気で聴きたい？"></textarea>
+        </label>
+        <menu class="dialog__actions">
+          <button type="reset" class="pill-btn pill-btn--ghost">キャンセル</button>
+          <button type="submit" class="pill-btn">リクエスト</button>
+        </menu>
+      </form>
+    </dialog>
+
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
